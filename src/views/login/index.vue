@@ -3,14 +3,25 @@
     <div class="login-head">
 
     </div>
-    <el-form class="login-form" ref="form" :model="user">
-      <el-form-item>
+    <!--
+      配置Form表单验证
+      1. 必须给 el-form 组件绑定 model 为表单数据对象
+      2. 给需要验证的表单项 el-form-item 绑定 prop 属性
+      3. 给 el-form 组件的 rules 属性配置验证规则
+    -->
+    <el-form
+      class="login-form"
+      ref="form"
+      :model="user"
+      :rules="formRules"
+    >
+      <el-form-item prop="mobile">
         <el-input
           v-model="user.mobile"
           placeholder="请输入手机号"
         ></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="code">
         <el-input
           v-model="user.code"
           placeholder="请输入验证码"
@@ -25,7 +36,8 @@
           type="primary"
           @click="onLogin"
           :loading="loginLoading"
-        >登录</el-button>
+        >登录
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -33,6 +45,7 @@
 
 <script>
 import request from '../../utils/request'
+
 export default {
   name: 'LoginIndex',
   components: {},
@@ -44,7 +57,18 @@ export default {
         code: ''
       },
       checked: false,
-      loginLoading: false
+      loginLoading: false,
+      formRules: {
+        // 要验证的数据名称，就是prop
+        mobile: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '请输入正确的号码格式', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
+          { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {},
@@ -101,9 +125,11 @@ export default {
   padding: 50px;
   min-width: 300px;
 }
+
 .login-btn {
   width: 100%;
 }
+
 .login-head {
   margin-bottom: 30px;
   width: 300px;
