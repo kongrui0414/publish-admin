@@ -5,7 +5,7 @@
 import axios from 'axios'
 // 创建了一个axios实例，复制了一个axios
 const request = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn/mp/' // 请求的基础路径
+  baseURL: 'http://api-toutiao-web.itheima.net' // 请求的基础路径
 })
 
 // 请求拦截器
