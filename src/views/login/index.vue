@@ -1,13 +1,10 @@
 <template>
-  <div id="app">
-
-<!--    路由出口-->
-    <router-view/>
-  </div>
+  <div class="login-container">登录页面</div>
 </template>
+
 <script>
 export default {
-  name: 'App',
+  name: 'Login',
   components: {},
   props: {},
   data () {
@@ -17,6 +14,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style scoped>
 
 </style>
