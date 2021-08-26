@@ -31,8 +31,8 @@
           placeholder="请输入验证码"
         ></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-checkbox v-model="checked">我已阅读并统一用户协议和隐私条款</el-checkbox>
+      <el-form-item prop="agree">
+        <el-checkbox v-model="user.agree">我已阅读并统一用户协议和隐私条款</el-checkbox>
       </el-form-item>
       <el-form-item>
         <el-button
@@ -58,19 +58,49 @@ export default {
     return {
       user: {
         mobile: '',
-        code: ''
+        code: '',
+        agree: false
       },
-      checked: false,
       loginLoading: false,
       formRules: {
         // 要验证的数据名称，就是prop
         mobile: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' },
-          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '请输入正确的号码格式', trigger: 'blur' }
+          {
+            required: true,
+            message: '手机号不能为空',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^1[3|5|7|8|9]\d{9}$/,
+            message: '请输入正确的号码格式',
+            trigger: 'blur'
+          }
         ],
         code: [
-          { required: true, message: '验证码不能为空', trigger: 'blur' },
-          { pattern: /^\d{6}$/, message: '请输入正确的验证码', trigger: 'blur' }
+          {
+            required: true,
+            message: '验证码不能为空',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^\d{6}$/,
+            message: '请输入正确的验证码',
+            trigger: 'blur'
+          }
+        ],
+        agree: [
+          {
+            // 自定义校验规则
+            validator: (rule, value, callback) => {
+              if (value) {
+                callback()
+              } else {
+                callback(new Error('err'))
+              }
+            },
+            message: '请勾选同意用户协议',
+            triangle: 'blur'
+          }
         ]
       }
     }
