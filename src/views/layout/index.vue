@@ -15,9 +15,9 @@
           <div class="avatar-wrap">
             <img
               class="avatar"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHUfiEdw5mFHEIW7XLjdzj98lTiZCu0NXUsw&usqp=CAU"
+              :src="user.photo"
               alt="">
-            <span>用户昵称</span>
+            <span>{{ user.name }}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </div>
           <el-dropdown-menu slot="dropdown">
@@ -43,11 +43,32 @@
 
 <script>
 import AppAside from './components/aside'
+import { getUserProfile } from '../../api/user'
 
 export default {
   name: 'LayoutIndex',
   components: {
     AppAside
+  },
+  props: {},
+  data () {
+    return {
+      user: {} // 当前登录信息
+    }
+  },
+  created () {
+    // 组件初始化后获取用户资料
+    this.loadUserProfile()
+  },
+  methods: {
+    // 除了登录，其他接口都要提供身份才能获取数据
+    loadUserProfile () {
+      getUserProfile().then(res => {
+        this.user = res.data.data
+        console.log('res here')
+        console.log(res)
+      })
+    }
   }
 }
 </script>

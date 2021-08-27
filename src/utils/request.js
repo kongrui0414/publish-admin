@@ -9,7 +9,22 @@ const request = axios.create({
 })
 
 // 请求拦截器
-
+// Add a request interceptor
+request.interceptors.request.use(
+  function (config) {
+    console.log(config)
+    // 可以允许定制统一业务功能处理
+    // 统一设置token
+    const user = JSON.parse(window.localStorage.getItem('user'))
+    // 如果有登录用户信息，统一设置token
+    if (user) {
+      config.headers.Authorization = `Bearer ${user.token}`
+    }
+    return config
+  },
+  function (error) {
+    return Promise.reject(error)
+  })
 // 响应拦截器
 
 // 导出请求方法
