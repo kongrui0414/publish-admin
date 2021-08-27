@@ -1,26 +1,20 @@
 <template>
-  <div id="app">
-
-<!--    路由出口-->
-    <router-view/>
-  </div>
+<div class="home-container">home</div>
 </template>
+
 <script>
 export default {
-  name: 'App',
+  name: 'HomeIndex',
   components: {},
   props: {},
   data () {
     return {}
   },
   computed: {},
-  watch: {},
-  created () {},
-  mounted () {},
   methods: {}
 }
 </script>
 
-<style lang="less">
+<style scoped>
 
 </style>

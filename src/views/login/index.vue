@@ -57,8 +57,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '',
-        code: '',
+        mobile: '13911111111',
+        code: '246810',
         agree: false
       },
       loginLoading: false,
@@ -131,9 +131,13 @@ export default {
           message: '登录成功',
           type: 'success'
         })
+        
         // 关闭loading
         this.loginLoading = false
         console.log(res)
+        
+        // 跳转到首页
+        this.$router.push('/')
       }).catch(err => {
         this.$message.error('登录失败')
         // 关闭loading
