@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: '/',
-    name: 'layout',
+    // name: 'layout', // 如果有默认子路由，就不要给父路由起名
     component: Layout,
     children: [
       {
