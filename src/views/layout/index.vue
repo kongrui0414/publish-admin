@@ -2,13 +2,21 @@
   <el-container class="layout-container">
     <el-aside
       class="aside"
-      width="200px">
-      <AppAside class="aside-menu"/>
+      width="auto"
+    >
+      <AppAside
+        class="aside-menu"
+        :is-collapse="isCollapse"
+      />
     </el-aside>
     <el-container>
       <el-header class="header">
         <div>
-          <i class="el-icon-s-fold"></i>
+          <i :class="{
+            'el-icon-s-fold': isCollapse,
+            'el-icon-s-unfold': !isCollapse
+          }"
+          @click="isCollapse = ! isCollapse"></i>
           库里后台管理系统
         </div>
         <el-dropdown>
@@ -50,10 +58,10 @@ export default {
   components: {
     AppAside
   },
-  props: {},
   data () {
     return {
-      user: {} // 当前登录信息
+      user: {}, // 当前登录信息
+      isCollapse: false
     }
   },
   created () {

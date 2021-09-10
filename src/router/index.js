@@ -30,4 +30,27 @@ const router = new VueRouter({
   routes
 })
 
+// 路由导航守卫：所有页面导航都会经过这里
+// to:
+// from:
+// next: 放行的方法
+router.beforeEach((to, from, next) => {
+  // 如果访问的不是login页面，要检验登录状态
+  // 没有登录就跳转到登录，已登录就允许通过
+  
+  const user = JSON.parse(window.localStorage.getItem('user'))
+  
+  if (to.path !== '/login') {
+    if (user) {
+      next()
+    } else {
+      // 没有登录跳转到登录页
+      next('/login')
+    }
+  } else {
+    // 允许通过
+    next()
+  }
+})
+
 export default router
