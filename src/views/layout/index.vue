@@ -30,7 +30,10 @@
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+<!--            组件默认不识别原生事件的，除非内部做了处理-->
+<!--            在一个组件的根元素上直接监听一个原生事件，可以使用 v-on 的.native修饰符-->
+            <el-dropdown-item
+              @click.native="onLogout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -75,6 +78,24 @@ export default {
         this.user = res.data.data
         console.log('res here')
         console.log(res)
+      })
+    },
+    onLogout () {
+      // 是否确认退出弹框
+      this.$confirm('确认退出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 把用户的登录状态清除，跳转到登录页面
+        window.localStorage.removeItem('user')
+        this.$router.push('/login')
+        // console.log('logout')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
       })
     }
   }
