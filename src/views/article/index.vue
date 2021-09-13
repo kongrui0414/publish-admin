@@ -46,26 +46,45 @@
       <div slot="header" class="clearfix">
         筛选结果一共1024条：
       </div>
-      <!--    数据列表-->
+      <!--    数据列表    -->
       <el-table
-        :data="tableData"
+        :data="articles"
         stripe
         size="medium"
         style="width: 100%"
         class="list-table">
         <el-table-column
           prop="date"
-          label="日期"
-          width="180">
+          label="封面">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
+          prop="title"
+          label="标题">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="地址">
+          prop="status"
+          label="状态">
+        </el-table-column>
+        <el-table-column
+          prop="pubdate"
+          label="发布时间">
+        </el-table-column>
+        <el-table-column
+          label="操作">
+          <template>
+            <el-button
+              size="medium"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+            ></el-button>
+            <el-button
+              size="medium"
+              type="danger"
+              icon="el-icon-delete"
+              circle
+            ></el-button>
+          </template>
         </el-table-column>
       </el-table>
 
