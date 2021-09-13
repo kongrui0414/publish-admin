@@ -108,7 +108,8 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000">
+        :total="1000"
+        @current-change="onCurrentChange">
       </el-pagination>
     </el-card>
   </div>
@@ -163,13 +164,19 @@ export default {
     this.loadArticles()
   },
   methods: {
-    loadArticles () {
-      getArticles().then(res => {
+    loadArticles (page = 1) {
+      getArticles({
+        page,
+        per_page: 10
+      }).then(res => {
         this.articles = res.data.data.results
       })
     },
     onSubmit () {
       console.log('submit!')
+    },
+    onCurrentChange (page) {
+      this.loadArticles(page)
     }
   }
 }
@@ -183,7 +190,7 @@ export default {
   margin-bottom: 20px;
 }
 .article-cover {
-  height: 100px;
+  width: 200px;
   background-size: cover;
 }
 </style>
