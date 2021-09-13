@@ -10,7 +10,12 @@
         <!--面包屑导航ending-->
       </div>
       <!-- 数据筛选表单 -->
-      <el-form ref="form" :model="form" label-width="40px" size="medium">
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="40px"
+        size="medium"
+        v-loading="loading">
         <el-form-item label="状态">
           <el-radio-group v-model="status">
             <!--el-radio默认把label作为文本和选中之后的value-->
@@ -48,7 +53,11 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="loadArticles(1)">查询</el-button>
+          <el-button
+            type="primary"
+            :disabled="loading"
+            @click="loadArticles(1)">
+            查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -63,7 +72,8 @@
         stripe
         size="medium"
         style="width: 100%"
-        class="list-table">
+        class="list-table"
+        v-loading="loading">
         <el-table-column
           prop="date"
           label="封面">
@@ -132,6 +142,7 @@
         layout="prev, pager, next"
         :total="totalCount"
         :page-size="pageSize"
+        :disabled="loading"
         @current-change="onCurrentChange">
       </el-pagination>
     </el-card>
@@ -204,7 +215,8 @@ export default {
       status: null, // 查询文章的状态，不传就是全部
       channels: [],
       channelId: null,
-      rangeDate: []
+      rangeDate: [],
+      loading: true // 加载表单 loading
     }
   },
   created () {
@@ -213,6 +225,7 @@ export default {
   },
   methods: {
     loadArticles (page = 1) {
+      this.loading = true
       getArticles({
         page,
         per_page: this.pageSize,
@@ -227,6 +240,8 @@ export default {
         } = res.data.data
         this.articles = results
         this.totalCount = totalCount
+        // 关闭加载中
+        this.loading = false
       })
     },
     onCurrentChange (page) {
