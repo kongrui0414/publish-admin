@@ -56,6 +56,14 @@
         <el-table-column
           prop="date"
           label="封面">
+          <template slot-scope="scope">
+<!--            如果是本地图片，就要用v-if渲染-->
+<!--            <img v-if="scope.row.cover.images[0]"-->
+<!--                 class="article-cover"-->
+<!--                 :src="scope.row.cover.images[0]">-->
+<!--            在运行期间动态加载就可以直接用 || 判断-->
+            <img :src="scope.row.cover.images[0] || 'https://img2.baidu.com/it/u=1428649624,1555131805&fm=26&fmt=auto&gp=0.jpg'" class="article-cover">
+          </template>
         </el-table-column>
         <el-table-column
           prop="title"
@@ -173,5 +181,9 @@ export default {
 }
 .list-table {
   margin-bottom: 20px;
+}
+.article-cover {
+  height: 100px;
+  background-size: cover;
 }
 </style>
