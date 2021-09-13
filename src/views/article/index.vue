@@ -7,7 +7,7 @@
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>内容管理</el-breadcrumb-item>
         </el-breadcrumb>
-      <!--面包屑导航ending-->
+        <!--面包屑导航ending-->
       </div>
       <!-- 数据筛选表单 -->
       <el-form ref="form" :model="form" label-width="40px" size="medium">
@@ -53,7 +53,7 @@
 
     <el-card class="filter-card">
       <div slot="header" class="clearfix">
-        筛选结果一共{{totalCount}}条结果：
+        筛选结果一共{{ totalCount }}条结果：
       </div>
       <!--    数据列表    -->
       <el-table
@@ -66,12 +66,23 @@
           prop="date"
           label="封面">
           <template slot-scope="scope">
-<!--            如果是本地图片，就要用v-if渲染-->
-<!--            <img v-if="scope.row.cover.images[0]"-->
-<!--                 class="article-cover"-->
-<!--                 :src="scope.row.cover.images[0]">-->
-<!--            在运行期间动态加载就可以直接用 || 判断-->
-            <img :src="scope.row.cover.images[0] || 'https://img2.baidu.com/it/u=1428649624,1555131805&fm=26&fmt=auto&gp=0.jpg'" class="article-cover">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="scope.row.cover.images[0]"
+              :fit="cover"
+              lazy>
+              <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div>
+            </el-image>
+            <!-- 如果是本地图片，就要用v-if渲染-->
+<!--             <img v-if="scope.row.cover.images[0]"-->
+<!--                  class="article-cover"-->
+<!--                  :src="scope.row.cover.images[0]">-->
+            <!--            在运行期间动态加载就可以直接用 || 判断-->
+<!--            <img-->
+<!--              :src="scope.row.cover.images[0] || 'https://img2.baidu.com/it/u=1428649624,1555131805&fm=26&fmt=auto&gp=0.jpg'"-->
+<!--              class="article-cover">-->
           </template>
         </el-table-column>
         <el-table-column
@@ -81,13 +92,13 @@
         <el-table-column
           prop="status"
           label="状态">
-<!--      如果要在自定义列表模板中获取遍历项数据，需要在template上声明slot-scope="scope"-->
+          <!--      如果要在自定义列表模板中获取遍历项数据，需要在template上声明slot-scope="scope"-->
           <template slot-scope="scope">
-            <el-tag :type="articleStatus[scope.row.status].type">{{articleStatus[scope.row.status].text}}</el-tag>
-<!--            <el-tag v-else-if="scope.row.status === 1">待审核</el-tag>-->
-<!--            <el-tag type="success" v-else-if="scope.row.status === 2">审核通过</el-tag>-->
-<!--            <el-tag type="danger" v-else-if="scope.row.status === 3">审核失败</el-tag>-->
-<!--            <el-tag type="info" v-else-if="scope.row.status === 4">已删除</el-tag>-->
+            <el-tag :type="articleStatus[scope.row.status].type">{{ articleStatus[scope.row.status].text }}</el-tag>
+            <!--            <el-tag v-else-if="scope.row.status === 1">待审核</el-tag>-->
+            <!--            <el-tag type="success" v-else-if="scope.row.status === 2">审核通过</el-tag>-->
+            <!--            <el-tag type="danger" v-else-if="scope.row.status === 3">审核失败</el-tag>-->
+            <!--            <el-tag type="info" v-else-if="scope.row.status === 4">已删除</el-tag>-->
           </template>
         </el-table-column>
         <el-table-column
@@ -112,7 +123,7 @@
           </template>
         </el-table-column>
       </el-table>
-      
+
       <!--    列表分页-->
       <el-pagination
         background
@@ -161,11 +172,30 @@ export default {
       }],
       articles: [],
       articleStatus: [
-        { status: 0, text: '草稿', type: 'warning' }, // index=0 status正好和index对应
-        { status: 1, text: '待审核' },
-        { status: 2, text: '审核通过', type: 'success' },
-        { status: 3, text: '审核失败', type: 'danger' },
-        { status: 4, text: '已删除', type: 'info' }
+        {
+          status: 0,
+          text: '草稿',
+          type: 'warning'
+        }, // index=0 status正好和index对应
+        {
+          status: 1,
+          text: '待审核'
+        },
+        {
+          status: 2,
+          text: '审核通过',
+          type: 'success'
+        },
+        {
+          status: 3,
+          text: '审核失败',
+          type: 'danger'
+        },
+        {
+          status: 4,
+          text: '已删除',
+          type: 'info'
+        }
       ],
       totalCount: 0, // 总数据条数
       pageSize: 20,
@@ -186,7 +216,10 @@ export default {
         status: this.status,
         channel_id: this.channelId
       }).then(res => {
-        const { results, total_count: totalCount } = res.data.data
+        const {
+          results,
+          total_count: totalCount
+        } = res.data.data
         this.articles = results
         this.totalCount = totalCount
       })
@@ -207,9 +240,11 @@ export default {
 .filter-card {
   margin-top: 30px;
 }
+
 .list-table {
   margin-bottom: 20px;
 }
+
 .article-cover {
   width: 200px;
   background-size: cover;
