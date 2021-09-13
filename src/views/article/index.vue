@@ -66,11 +66,11 @@
           label="状态">
 <!--      如果要在自定义列表模板中获取遍历项数据，需要在template上声明slot-scope="scope"-->
           <template slot-scope="scope">
-            <el-tag type="warning" v-if="scope.row.status === 0">草稿</el-tag>
-            <el-tag v-else-if="scope.row.status === 1">待审核</el-tag>
-            <el-tag type="success" v-else-if="scope.row.status === 2">审核通过</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.status === 3">审核失败</el-tag>
-            <el-tag type="info" v-else-if="scope.row.status === 4">已删除</el-tag>
+            <el-tag :type="articleStatus[scope.row.status].type">{{articleStatus[scope.row.status].text}}</el-tag>
+<!--            <el-tag v-else-if="scope.row.status === 1">待审核</el-tag>-->
+<!--            <el-tag type="success" v-else-if="scope.row.status === 2">审核通过</el-tag>-->
+<!--            <el-tag type="danger" v-else-if="scope.row.status === 3">审核失败</el-tag>-->
+<!--            <el-tag type="info" v-else-if="scope.row.status === 4">已删除</el-tag>-->
           </template>
         </el-table-column>
         <el-table-column
@@ -141,7 +141,14 @@ export default {
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
       }],
-      articles: []
+      articles: [],
+      articleStatus: [
+        { status: 0, text: '草稿', type: 'warning' }, // index=0 status正好和index对应
+        { status: 1, text: '待审核' },
+        { status: 2, text: '审核通过', type: 'success' },
+        { status: 3, text: '审核失败', type: 'danger' },
+        { status: 4, text: '已删除', type: 'info' }
+      ]
     }
   },
   created () {
