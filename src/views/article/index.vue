@@ -108,7 +108,8 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000"
+        :total="totalCount"
+        :page-size="pageSize"
         @current-change="onCurrentChange">
       </el-pagination>
     </el-card>
@@ -157,7 +158,9 @@ export default {
         { status: 2, text: '审核通过', type: 'success' },
         { status: 3, text: '审核失败', type: 'danger' },
         { status: 4, text: '已删除', type: 'info' }
-      ]
+      ],
+      totalCount: 0, // 总数据条数
+      pageSize: 20
     }
   },
   created () {
@@ -167,9 +170,11 @@ export default {
     loadArticles (page = 1) {
       getArticles({
         page,
-        per_page: 10
+        per_page: this.pageSize
       }).then(res => {
-        this.articles = res.data.data.results
+        const { results, total_count: totalCount } = res.data.data
+        this.articles = results
+        this.totalCount = totalCount
       })
     },
     onSubmit () {
