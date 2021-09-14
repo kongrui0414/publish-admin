@@ -144,6 +144,7 @@
         :total="totalCount"
         :page-size="pageSize"
         :disabled="loading"
+        :current-page.sync="page"
         @current-change="onCurrentChange">
       </el-pagination>
     </el-card>
@@ -221,7 +222,8 @@ export default {
       channels: [],
       channelId: null,
       rangeDate: [],
-      loading: true // 加载表单 loading
+      loading: true, // 加载表单 loading
+      page: 1 // 当前页码
     }
   },
   created () {
@@ -267,7 +269,8 @@ export default {
       }).then(() => {
         // 删除
         deleteArticle(articleId.toString()).then(res => {
-          console.log(res)
+          // 成功删除，重新加载当前页文章数据列表
+          this.loadArticles(this.page)
         })
       }).catch(() => {
         this.$message({
