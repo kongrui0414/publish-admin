@@ -3,9 +3,20 @@
  */
 // 创建axios实例，复制了一个axios
 import axios from 'axios'
+import JSONbig from 'json-bigint'
 // 创建了一个axios实例，复制了一个axios
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net' // 请求的基础路径
+  baseURL: 'http://api-toutiao-web.itheima.net', // 请求的基础路径
+  
+  // 处理后端返回的数据，用bigint(相关api查文档或者GitHub)
+  transformResponse: [function (data) {
+    // console.log(data)
+    try {
+      return JSONbig.parse(data)
+    } catch (e) {
+      return data
+    }
+  }]
 })
 
 // 请求拦截器

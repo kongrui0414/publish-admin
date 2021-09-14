@@ -119,7 +119,7 @@
         </el-table-column>
         <el-table-column
           label="操作">
-          <template>
+          <template slot-scope="scope">
             <el-button
               size="medium"
               type="primary"
@@ -131,6 +131,7 @@
               type="danger"
               icon="el-icon-delete"
               circle
+              @click="onDeleteArticle(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -150,7 +151,11 @@
 </template>
 
 <script>
-import { getArticles, getArticleChannels } from '../../api/article'
+import {
+  getArticles,
+  getArticleChannels,
+  deleteArticle
+} from '../../api/article'
 
 export default {
   name: 'index',
@@ -251,6 +256,30 @@ export default {
       getArticleChannels().then(res => {
         this.channels = res.data.data.channels
       })
+    },
+    onDeleteArticle (articleId) {
+      console.log(articleId)
+      console.log(articleId.toString())
+      this.$confirm('确认删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 删除
+        deleteArticle(articleId.toString()).then(res => {
+          console.log(res)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+      // 找到数据接口
+      // 封装请求方法
+      // 删除请求调用
+      // 处理相应结果
+      console.log('onDeleteArticle')
     }
   }
 }

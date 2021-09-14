@@ -20,3 +20,12 @@ export const getArticleChannels = () => {
     url: '/mp/v1_0/channels'
   })
 }
+
+// 删除文章
+export const deleteArticle = articleId => {
+  return request({
+    method: 'DELETE',
+    // ：表示需要传递参数
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}
