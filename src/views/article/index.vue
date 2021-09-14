@@ -232,6 +232,7 @@ export default {
   },
   methods: {
     loadArticles (page = 1) {
+      // 初始化，传入默认page=1
       this.loading = true
       getArticles({
         page,
