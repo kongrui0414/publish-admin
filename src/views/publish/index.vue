@@ -13,7 +13,19 @@
         <el-input v-model="article.title"></el-input>
       </el-form-item>
       <el-form-item label="内容">
-        <el-input type="textarea" v-model="article.content"></el-input>
+        <el-tiptap
+          lang="zh"
+          v-model="article.content"
+          :extensions="extensions"
+        ></el-tiptap>
+<!--        <quill-editor-->
+<!--          ref="myQuillEditor"-->
+<!--          v-model="article.content"-->
+<!--          :options="editorOption"-->
+<!--          @blur="onEditorBlur($event)"-->
+<!--          @focus="onEditorFocus($event)"-->
+<!--          @ready="onEditorReady($event)"-->
+<!--        />-->
       </el-form-item>
       <el-form-item label="封面">
         <el-radio-group v-model="article.cover.type">
@@ -44,10 +56,39 @@
 
 <script>
 import { getArticleChannels, addArticle, getArticle, updateArticle } from '@/api/article'
+import {
+  ElementTiptap,
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Underline,
+  Italic,
+  Strike,
+  ListItem,
+  BulletList,
+  OrderedList,
+  TodoItem,
+  TodoList,
+  Preview,
+  Fullscreen,
+  Image,
+  CodeBlock
+} from 'element-tiptap'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+// import { quillEditor } from 'vue-quill-editor'
+
+import 'element-tiptap/lib/index.css'
 
 export default {
   name: 'PublishIndex',
-  components: {},
+  components: {
+    'el-tiptap': ElementTiptap
+    // quillEditor
+  },
   props: {},
   data () {
     return {
@@ -60,8 +101,26 @@ export default {
           images: []
         },
         channel_id: null
-        
-      }
+      },
+      extensions: [
+        new Doc(),
+        new Text(),
+        new Paragraph(),
+        new Heading({ level: 5 }),
+        new Bold({ bubble: true }), // render command-button in bubble menu.
+        new Underline({ bubble: true, menubar: false }), // render command-button in bubble menu but not in menubar.
+        new Italic(),
+        new Image(),
+        new Strike(),
+        new CodeBlock(),
+        new ListItem(),
+        new BulletList(),
+        new OrderedList(),
+        new TodoItem(),
+        new TodoList(),
+        new Fullscreen(),
+        new Preview()
+      ]
     }
   },
   created () {
@@ -112,9 +171,17 @@ export default {
       getArticle(this.$route.query.id).then(res => {
         this.article = res.data.data
       })
+    },
+    onEditorBlur (quill) {
+      console.log('editor blur!', quill)
+    },
+    onEditorFocus (quill) {
+      console.log('editor focus!', quill)
+    },
+    onEditorReady (quill) {
+      console.log('editor ready!', quill)
     }
   }
-  
 }
 </script>
 
