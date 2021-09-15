@@ -17,6 +17,8 @@
           lang="zh"
           v-model="article.content"
           :extensions="extensions"
+          height="400"
+          placeholder="请输入文章内容"
         ></el-tiptap>
 <!--        <quill-editor-->
 <!--          ref="myQuillEditor"-->
@@ -74,7 +76,8 @@ import {
   Preview,
   Fullscreen,
   Image,
-  CodeBlock
+  CodeBlock,
+  TextColor
 } from 'element-tiptap'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -111,6 +114,7 @@ export default {
         new Underline({ bubble: true, menubar: false }), // render command-button in bubble menu but not in menubar.
         new Italic(),
         new Image(),
+        new TextColor(),
         new Strike(),
         new CodeBlock(),
         new ListItem(),
