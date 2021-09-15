@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle } from '@/api/article'
+import { getArticleChannels, addArticle, getArticle } from '@/api/article'
 
 export default {
   name: 'PublishIndex',
@@ -66,6 +66,10 @@ export default {
   },
   created () {
     this.loadChannels()
+    // 要判断路由路径参数中有无 id ，来决定是发布还是修改
+    if (this.$route.query.id) {
+      this.loadArticle()
+    }
   },
   methods: {
     loadChannels () {
@@ -85,8 +89,14 @@ export default {
       })
       // 处理响应结果
       console.log('submit!')
+    },
+    loadArticle () {
+      getArticle(this.$route.query.id).then(res => {
+        this.article = res.data.data
+      })
     }
   }
+  
 }
 </script>
 
