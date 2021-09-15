@@ -52,5 +52,7 @@ export default {
 </script>
 
 <style scoped>
-
+.el-menu-item {
+  width: 200px;
+}
 </style>

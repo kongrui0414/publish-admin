@@ -5,7 +5,7 @@
       <!--    面包屑导航-->
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>发布文章</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ $route.query.id ? '修改文章' : '发布文章'}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-form ref="form" :model="article" label-width="40px">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle, getArticle } from '@/api/article'
+import { getArticleChannels, addArticle, getArticle, updateArticle } from '@/api/article'
 
 export default {
   name: 'PublishIndex',
@@ -81,12 +81,30 @@ export default {
       // 找到数据接口
       // 封装请求方法
       // 请求提交表单
-      addArticle(this.article, draft).then(res => {
-        this.$message({
-          message: '发布成功',
-          type: 'success'
+      // 判断是修改文章还是发布文章（因为用的是同一组件）
+      const articleId = this.$route.query.id
+      if (articleId) {
+        // 修改
+        updateArticle(articleId, this.article, draft).then(res => {
+          console.log(res)
+          this.$message({
+            message: `${draft ? '存入草稿' : '发布'}成功`,
+            type: 'success'
+          })
+          // 跳转到内容管理页面
+          this.$router.push('/article')
         })
-      })
+      } else {
+        addArticle(this.article, draft).then(res => {
+          this.$message({
+            message: `${draft ? '存入草稿' : '发布'}成功`,
+            type: 'success'
+          })
+          // 跳转到内容管理页面
+          this.$router.push('/article')
+        })
+      }
+     
       // 处理响应结果
       console.log('submit!')
     },
