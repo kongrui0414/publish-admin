@@ -8,11 +8,16 @@
         <el-breadcrumb-item>{{ $route.query.id ? '修改文章' : '发布文章'}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-form ref="form" :model="article" label-width="40px">
-      <el-form-item label="标题">
+    <el-form
+      :model="article"
+      :rules="formRules"
+      label-width="60px"
+      ref="publish-form"
+    >
+      <el-form-item label="标题" prop="title">
         <el-input v-model="article.title"></el-input>
       </el-form-item>
-      <el-form-item label="内容">
+      <el-form-item label="内容" prop="content">
         <el-tiptap
           lang="zh"
           v-model="article.content"
@@ -37,8 +42,10 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="频道">
-        <el-select v-model="article.channel_id" placeholder="请选择频道">
+      <el-form-item label="频道" prop="channel_id">
+        <el-select
+          v-model="article.channel_id"
+          placeholder="请选择频道">
           <el-option
             :label="channel.name"
             :value="channel.id"
@@ -132,7 +139,28 @@ export default {
         new TodoList(),
         new Fullscreen(),
         new Preview()
-      ]
+      ],
+      formRules: {
+        title: [
+          { required: true, message: '请输入文章标题', trigger: 'blur' },
+          { min: 5, max: 30, message: '长度在 5 到 30 个字符', trigger: 'blur' }
+        ],
+        content: [
+          {
+            validator (rule, value, callback) {
+              if (value === '<p></p>' || value === '') {
+                callback(new Error('请输入文章内容'))
+              } else {
+                callback()
+              }
+            }
+          },
+          { required: true }
+        ],
+        channel_id: [
+          { required: true, message: '请选择文章频道' }
+        ]
+      }
     }
   },
   created () {
@@ -149,6 +177,12 @@ export default {
       })
     },
     onPublish (draft = false) {
+      this.$refs['publish-form'].validate(valid => {
+        // 验证失败，停止提交表单
+        if (!valid) {
+          
+        }
+      })
       // 找到数据接口
       // 封装请求方法
       // 请求提交表单
@@ -175,9 +209,6 @@ export default {
           this.$router.push('/article')
         })
       }
-     
-      // 处理响应结果
-      console.log('submit!')
     },
     loadArticle () {
       getArticle(this.$route.query.id).then(res => {
