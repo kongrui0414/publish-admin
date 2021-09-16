@@ -16,52 +16,16 @@
       </el-radio-group>
     </div>
     <el-row :gutter="10">
-      <el-col :lg="4" :md="6" :xs="12">
+      <el-col
+        :lg="4"
+        :md="6"
+        :xs="12"
+        v-for="(img, index) in images"
+        :key="index"
+      >
         <el-image
           style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-          :fit="cover"></el-image>
-      </el-col>
-      <el-col :lg="4" :md="6" :xs="12">
-        <el-image
-          style="min-width: 200px; height: 150px"
-          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          :src="img.url"
           :fit="cover"></el-image>
       </el-col>
     </el-row>
@@ -70,11 +34,24 @@
 </template>
 
 <script>
+import { getImages } from '@/api/image'
+
 export default {
   name: 'ImageIndex',
   data () {
     return {
-      radio1: '全部'
+      radio1: '全部',
+      images: []
+    }
+  },
+  created () {
+    this.loadImages()
+  },
+  methods: {
+    loadImages () {
+      getImages().then(res => {
+        this.images = res.data.data.results
+      })
     }
   }
 }
