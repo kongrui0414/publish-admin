@@ -31,7 +31,7 @@
           <el-select v-model="channelId" placeholder="请选择频道">
             <el-option
               label="全部"
-              value="null"
+              value=null
             ></el-option>
             <el-option
               :label="channel.name"

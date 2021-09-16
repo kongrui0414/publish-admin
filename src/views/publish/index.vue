@@ -83,7 +83,7 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 // import { quillEditor } from 'vue-quill-editor'
-
+import { uploadImage } from '../../api/image'
 import 'element-tiptap/lib/index.css'
 
 export default {
@@ -113,7 +113,15 @@ export default {
         new Bold({ bubble: true }), // render command-button in bubble menu.
         new Underline({ bubble: true, menubar: false }), // render command-button in bubble menu but not in menubar.
         new Italic(),
-        new Image(),
+        new Image({
+          uploadRequest (file) {
+            const fd = new FormData()
+            fd.append('image', file)
+            return uploadImage(fd).then(res => {
+              return res.data.data.url
+            })
+          }
+        }),
         new TextColor(),
         new Strike(),
         new CodeBlock(),
