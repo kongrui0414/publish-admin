@@ -10,9 +10,17 @@
 <!--      <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
     </div>
     <div style="padding-bottom: 20px">
-      <el-radio-group v-model="radio1" size="medium">
-        <el-radio-button label="全部"></el-radio-button>
-        <el-radio-button label="收藏"></el-radio-button>
+      <el-radio-group
+        v-model="collect"
+        size="medium"
+        @change="onCollectChange"
+      >
+        <el-radio-button
+          :label="false"
+        >全部</el-radio-button>
+        <el-radio-button
+          :label="true"
+        >收藏</el-radio-button>
       </el-radio-group>
     </div>
     <el-row :gutter="10">
@@ -40,18 +48,23 @@ export default {
   name: 'ImageIndex',
   data () {
     return {
-      radio1: '全部',
+      collect: false,
       images: []
     }
   },
   created () {
-    this.loadImages()
+    this.loadImages(false)
   },
   methods: {
-    loadImages () {
-      getImages().then(res => {
+    loadImages (collect = false) {
+      getImages({
+        collect
+      }).then(res => {
         this.images = res.data.data.results
       })
+    },
+    onCollectChange (value) {
+      this.loadImages(value)
     }
   }
 }
