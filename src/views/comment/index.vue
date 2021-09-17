@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        label="状态">
+        label="评论状态">
         <template slot-scope="scope">
           {{ scope.row.comment_status ? '正常' : '关闭'}}
         </template>
@@ -42,7 +42,9 @@
           <el-switch
             v-model="scope.row.comment_status"
             active-color="#13ce66"
-            inactive-color="#ff4949">
+            inactive-color="#ff4949"
+            @change="onStatusChange(scope.row)"
+          >
           </el-switch>
         </template>
       </el-table-column>
@@ -64,7 +66,7 @@
 </template>
 
 <script>
-import { getArticles } from '@/api/article'
+import { getArticles, updateCommentStatus } from '@/api/article'
 
 export default {
   name: 'index',
@@ -101,6 +103,12 @@ export default {
         response_type: 'comment'
       }).then(res => {
         this.articles = res.data.data.results
+      })
+    },
+    onStatusChange (article) {
+      // 拿到对应的数据，请求接口
+      updateCommentStatus(article.id.toString(), article.comment_status).then(res => {
+        console.log(res)
       })
     }
   }
