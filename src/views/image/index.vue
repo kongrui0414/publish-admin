@@ -45,14 +45,19 @@
             :src="img.url"
             :fit="cover"></el-image>
           <div class="image-action">
-            <i
-              :class="{
-              'el-icon-star-on': img.is_collected,
-              'el-icon-star-off': !img.is_collected}"
+            <el-button
+              type="warning"
+              :icon="img.is_collected ? 'el-icon-star-on' : 'el-icon-star-off'"
+              circle
+              size="small"
               @click="onCollect(img)"
-            >
-            </i>
-            <i class="el-icon-delete-solid"></i>
+            ></el-button>
+            <el-button
+              size="small"
+              type="danger"
+              icon="el-icon-delete-solid"
+              circle
+            ></el-button>
           </div>
         </el-col>
       </el-row>
