@@ -51,6 +51,7 @@
         :total="totalCount"
         :page-size="pageSize"
         @current-change="onPageChange"
+        :current-page.sync="page"
       >
       </el-pagination>
     </el-card>
@@ -90,7 +91,8 @@ export default {
         Authorization: `Bearer ${user.token}`
       },
       totalCount: 0,
-      pageSize: 20
+      pageSize: 20,
+      page: 1
     }
   },
   created () {
@@ -101,7 +103,7 @@ export default {
       getImages({
         collect: this.collect,
         page,
-        per_age: 10
+        per_age: this.pageSize
       }).then(res => {
         this.images = res.data.data.results
         this.totalCount = res.data.data.total_count
