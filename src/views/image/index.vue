@@ -45,6 +45,14 @@
             :fit="cover"></el-image>
         </el-col>
       </el-row>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="totalCount"
+        :page-size="pageSize"
+        @current-change="onPageChange"
+      >
+      </el-pagination>
     </el-card>
     <el-dialog
       title="上传素材"
@@ -80,22 +88,31 @@ export default {
       dialogUploadVisible: false,
       uploadHeaders: {
         Authorization: `Bearer ${user.token}`
-      }
+      },
+      totalCount: 0,
+      pageSize: 20
     }
   },
   created () {
-    this.loadImages(false)
+    this.loadImages(1)
   },
   methods: {
-    loadImages (collect = false) {
+    loadImages (page = 1) {
       getImages({
-        collect
+        collect: this.collect,
+        page,
+        per_age: 10
       }).then(res => {
         this.images = res.data.data.results
+        this.totalCount = res.data.data.total_count
       })
     },
-    onCollectChange (value) {
-      this.loadImages(value)
+    onUploadSuccess () {
+      this.dialogUploadVisible = false
+      this.loadImages(1)
+    },
+    onPageChange (page) {
+      console.log(page)
     }
   }
 }
