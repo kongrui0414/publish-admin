@@ -38,11 +38,22 @@
           :xs="12"
           v-for="(img, index) in images"
           :key="index"
+          class="image-item"
         >
           <el-image
             style="min-width: 200px; height: 150px"
             :src="img.url"
             :fit="cover"></el-image>
+          <div class="image-action">
+            <i
+              :class="{
+              'el-icon-star-on': img.is_collected,
+              'el-icon-star-off': !img.is_collected}"
+              @click="onCollect(img)"
+            >
+            </i>
+            <i class="el-icon-delete-solid"></i>
+          </div>
         </el-col>
       </el-row>
       <el-pagination
@@ -77,7 +88,7 @@
 </template>
 
 <script>
-import { getImages } from '@/api/image'
+import { getImages, collectImage } from '@/api/image'
 
 export default {
   name: 'ImageIndex',
@@ -111,10 +122,15 @@ export default {
     },
     onUploadSuccess () {
       this.dialogUploadVisible = false
-      this.loadImages(1)
+      this.loadImages(this.page)
     },
     onPageChange (page) {
       console.log(page)
+    },
+    onCollect (img) {
+      collectImage(img.id, !img.is_collected).then(res => {
+        img.is_collected = !img.is_collected
+      })
     }
   }
 }
@@ -125,5 +141,23 @@ export default {
   padding-bottom: 20px;
   display: flex;
   justify-content: space-between;
+}
+
+.image-item {
+  position: relative;
+}
+
+.image-action {
+  position: absolute;
+  height: 40px;
+  background-color: rgba(204, 204, 204, 0.5);
+  bottom: 4px;
+  left: 5px;
+  right: 5px;
+  font-size: 25px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #fff;
 }
 </style>
