@@ -43,6 +43,7 @@
             v-model="scope.row.comment_status"
             active-color="#13ce66"
             inactive-color="#ff4949"
+            :disabled="scope.row.statusDisabled"
             @change="onStatusChange(scope.row)"
           >
           </el-switch>
@@ -102,13 +103,24 @@ export default {
       getArticles({
         response_type: 'comment'
       }).then(res => {
+        const { results } = res.data.data
+        results.forEach(article => {
+          article.statusDisabled = false
+        })
         this.articles = res.data.data.results
       })
     },
     onStatusChange (article) {
+      // 发送请求的过程中 按钮禁用
+      article.statusDisabled = true
       // 拿到对应的数据，请求接口
       updateCommentStatus(article.id.toString(), article.comment_status).then(res => {
-        console.log(res)
+        // 请求结束后，按钮取消禁用
+        article.statusDisabled = false
+        this.$message({
+          type: 'success',
+          message: article.comment_status ? '成功开启文章评论状态' : '成功关闭文章评论状态'
+        })
       })
     }
   }
