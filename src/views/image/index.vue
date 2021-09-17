@@ -51,7 +51,18 @@
       :visible.sync="dialogUploadVisible"
       :append-to-body="true"
     >
-      hello curry
+      <el-upload
+        class="upload-demo"
+        drag
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        :headers="uploadHeaders"
+        name="image"
+        with-credentials="true"
+        multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
@@ -62,10 +73,14 @@ import { getImages } from '@/api/image'
 export default {
   name: 'ImageIndex',
   data () {
+    const user = JSON.parse(window.localStorage.getItem('user'))
     return {
       collect: false,
       images: [],
-      dialogUploadVisible: false
+      dialogUploadVisible: false,
+      uploadHeaders: {
+        Authorization: `Bearer ${user.token}`
+      }
     }
   },
   created () {
