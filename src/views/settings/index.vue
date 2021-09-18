@@ -46,11 +46,15 @@
     </el-row>
   </el-card>
   <el-dialog
+    width="30%"
     title="修改头像"
     :visible.sync="dialogVisible"
     append-to-body
+    @opened="onDialogOpened"
   >
-    <img :src="previeImage">
+    <div class="preview-image-wrap">
+      <img class="preview-image" :src="previeImage" ref="preview-image">
+    </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -61,6 +65,8 @@
 
 <script>
 import { getUserProfile } from '@/api/user'
+import 'cropperjs/dist/cropper.css'
+import Cropper from 'cropperjs'
 
 export default {
   name: 'SettingsIndex',
@@ -108,11 +114,37 @@ export default {
       // 展示弹出层，图片预览
       this.dialogVisible = true
       this.$refs.file.value = ''
+    },
+    onDialogOpened () {
+      // img必须是可见状态才能完成初始化
+      // 获取图片节点
+      const image = this.$refs['preview-image']
+      // 初始化裁切器
+      const cropper = new Cropper(image, {
+        aspectRatio: 16 / 9,
+        crop (event) {
+          console.log(event.detail.x)
+          console.log(event.detail.y)
+          console.log(event.detail.width)
+          console.log(event.detail.height)
+          console.log(event.detail.rotate)
+          console.log(event.detail.scaleX)
+          console.log(event.detail.scaleY)
+        }
+      })
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.preview-image-wrap {
+  /* Ensure the size of the image fit the container perfectly */
+  .preview-image {
+    display: block;
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
+    height: 200px;
+  }
+}
 </style>
