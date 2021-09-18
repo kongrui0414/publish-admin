@@ -10,7 +10,7 @@
       <!--面包屑导航ending-->
     </div>
     <el-row>
-      <el-col :span="12" offset="2">
+      <el-col :span="12" offset=2>
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="编号">
             {{ user.id }}
@@ -32,7 +32,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col offset="5" :span="4">
+      <el-col offset=5 :span="4">
         <label for="file">
           <el-avatar
           shape="square"
@@ -58,14 +58,18 @@
     </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    <el-button
+      type="primary"
+      :loading="updatePhotoLoading"
+      @click="onUpdatePhoto"
+    >确 定</el-button>
   </span>
   </el-dialog>
 </div>
 </template>
 
 <script>
-import { getUserProfile } from '@/api/user'
+import { getUserProfile, updateUserPhoto } from '@/api/user'
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 
@@ -73,6 +77,16 @@ export default {
   name: 'SettingsIndex',
   data () {
     return {
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
       user: {
         email: '',
         id: null,
@@ -83,7 +97,8 @@ export default {
       },
       dialogVisible: false, // 控制图片预览显示
       previewImage: '',
-      cropper: null
+      cropper: null,
+      updatePhotoLoading: false
     }
   },
   created () {
@@ -139,6 +154,31 @@ export default {
     onDialogClosed () {
       // 对话框关闭，销毁裁切器
       // this.cropper.destroy()
+    },
+    onUpdatePhoto () {
+      this.updatePhotoLoading = true
+      // 获取裁切的图片对象
+      this.cropper.getCroppedCanvas().toBlob(file => {
+        const fd = new FormData()
+        fd.append('photo', file)
+        // 请求更新用户头像
+        updateUserPhoto(fd).then(res => {
+          console.log(res)
+          // 关闭对话框
+          this.dialogVisible = false
+          // 更新视图展示
+          // 把服务端返回的图片请求显示有点慢
+          // this.user.photo = res.data.data.photo
+          // 直接把裁切结果转为blob数据本地预览
+          this.user.photo = window.URL.createObjectURL(file)
+          // 关闭loading
+          this.updatePhotoLoading = false
+          this.$message({
+            type: 'success',
+            message: '更新头像成功'
+          })
+        })
+      })
     }
   }
 }
