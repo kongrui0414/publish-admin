@@ -33,13 +33,15 @@
         </el-form>
       </el-col>
       <el-col offset="2" :span="4">
-        <el-avatar
+        <label for="file">
+          <el-avatar
           shape="square"
           :size="150"
           :fit="cover"
           :src="user.photo"
-        ></el-avatar>
-        <p>点击修改头像</p>
+          ></el-avatar>
+          <p>点击修改头像</p></label>
+        <input id="file" type="file" hidden ref="file">
       </el-col>
     </el-row>
   </el-card>
