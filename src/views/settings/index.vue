@@ -51,9 +51,10 @@
     :visible.sync="dialogVisible"
     append-to-body
     @opened="onDialogOpened"
+    @closed="onDialogClosed"
   >
     <div class="preview-image-wrap">
-      <img class="preview-image" :src="previeImage" ref="preview-image">
+      <img class="preview-image" :src="previewImage" ref="preview-image">
     </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
@@ -72,16 +73,6 @@ export default {
   name: 'SettingsIndex',
   data () {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       user: {
         email: '',
         id: null,
@@ -91,7 +82,8 @@ export default {
         photo: ''
       },
       dialogVisible: false, // 控制图片预览显示
-      previeImage: ''
+      previewImage: '',
+      cropper: null
     }
   },
   created () {
@@ -110,7 +102,7 @@ export default {
       // 处理图片预览
       const file = this.$refs.file
       const blobData = window.URL.createObjectURL(file.files[0])
-      this.previeImage = blobData
+      this.previewImage = blobData
       // 展示弹出层，图片预览
       this.dialogVisible = true
       this.$refs.file.value = ''
@@ -119,8 +111,16 @@ export default {
       // img必须是可见状态才能完成初始化
       // 获取图片节点
       const image = this.$refs['preview-image']
+      // 初始化完裁切器，如果图片发生变化，裁切器默认不更新
+      // 解决图片不更新：
+      // 方法一：裁切器.replace 方法
+      // 方法二：销毁裁切器，重新初始化
+      if (this.cropper) {
+        this.cropper.replace(this.previewImage)
+        return
+      }
       // 初始化裁切器
-      const cropper = new Cropper(image, {
+      this.cropper = new Cropper(image, {
         aspectRatio: 16 / 9,
         crop (event) {
           console.log(event.detail.x)
@@ -132,6 +132,10 @@ export default {
           console.log(event.detail.scaleY)
         }
       })
+    },
+    onDialogClosed () {
+      // 对话框关闭，销毁裁切器
+      // this.cropper.destroy()
     }
   }
 }
@@ -144,7 +148,7 @@ export default {
     display: block;
     /* This rule is very important, please don't ignore this */
     max-width: 100%;
-    height: 200px;
+    height: 300px;
   }
 }
 </style>
