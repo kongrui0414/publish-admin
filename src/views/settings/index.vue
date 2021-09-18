@@ -10,7 +10,7 @@
       <!--面包屑导航ending-->
     </div>
     <el-row>
-      <el-col :span="15">
+      <el-col :span="12" offset="2">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="编号">
             {{ user.id }}
@@ -32,7 +32,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col offset="2" :span="4">
+      <el-col offset="5" :span="4">
         <label for="file">
           <el-avatar
           shape="square"
@@ -121,16 +121,19 @@ export default {
       }
       // 初始化裁切器
       this.cropper = new Cropper(image, {
-        aspectRatio: 16 / 9,
-        crop (event) {
-          console.log(event.detail.x)
-          console.log(event.detail.y)
-          console.log(event.detail.width)
-          console.log(event.detail.height)
-          console.log(event.detail.rotate)
-          console.log(event.detail.scaleX)
-          console.log(event.detail.scaleY)
-        }
+        aspectRatio: 1,
+        viewMode: 1,
+        cropBoxResizable: false
+        // 移动裁切器，调用 crop 方法
+        // crop (event) {
+        //   console.log(event.detail.x)
+        //   console.log(event.detail.y)
+        //   console.log(event.detail.width)
+        //   console.log(event.detail.height)
+        //   console.log(event.detail.rotate)
+        //   console.log(event.detail.scaleX)
+        //   console.log(event.detail.scaleY)
+        // }
       })
     },
     onDialogClosed () {
