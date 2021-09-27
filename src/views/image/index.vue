@@ -43,7 +43,7 @@
           <el-image
             style="min-width: 200px; height: 150px"
             :src="img.url"
-            :fit="cover"></el-image>
+            fit="cover"></el-image>
           <div class="image-action">
             <el-button
               type="warning"
@@ -82,7 +82,6 @@
         action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
         :headers="uploadHeaders"
         name="image"
-        with-credentials="true"
         multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -104,7 +103,8 @@ export default {
       images: [],
       dialogUploadVisible: false,
       uploadHeaders: {
-        Authorization: `Bearer ${user.token}`
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': ''
       },
       totalCount: 0,
       pageSize: 20,
@@ -131,6 +131,9 @@ export default {
     },
     onPageChange (page) {
       console.log(page)
+    },
+    onCollectChange () {
+      console.log('onCollectChange')
     },
     onCollect (img) {
       collectImage(img.id, !img.is_collected).then(res => {

@@ -81,7 +81,7 @@
             <el-image
               style="width: 100px; height: 100px"
               :src="scope.row.cover.images[0]"
-              :fit="cover"
+              fit="cover"
               lazy>
               <div slot="placeholder" class="image-slot">
                 加载中<span class="dot">...</span>
